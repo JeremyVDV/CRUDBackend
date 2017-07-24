@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Todo implements Serializable {
     @Id
     @GeneratedValue
-    @Column(name = "idtodo")
+    @Column(name = "id")
     private long id;
 
     public long getId() { return id; }
@@ -42,18 +42,10 @@ public class Todo implements Serializable {
     public int getDone() { return done; }
     public void setDone(int done) { this.done = done; }
 
-    /*
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "todo_has_person", catalog = "quintor", joinColumns = {
-            @JoinColumn(name = "todoid", nullable = false, updatable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "personid",
-                    nullable = false, updatable = false) })
-                    */
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(name="todo_has_person", joinColumns=@JoinColumn(name="idtodo"), inverseJoinColumns=@JoinColumn(name="idperson"))
-    private Set<Person> persons;
+    @ManyToOne
+    @JoinColumn(name = "personid")
+    private Person person;
 
-    @JsonIgnore
-    public Set<Person> getPersons() { return persons; }
-    public void setPersons(Set<Person> persons) { this.persons = persons; }
+    public Person getPerson() {return person;}
+    public void setPerson(Person person) {this.person = person;}
 }

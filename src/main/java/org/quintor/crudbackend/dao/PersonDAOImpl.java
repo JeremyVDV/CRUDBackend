@@ -2,6 +2,7 @@ package org.quintor.crudbackend.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -22,7 +23,6 @@ public class PersonDAOImpl implements PersonDAO {
             tx = session.beginTransaction();
             session.save(person);
             tx.commit();
-            session.close();
             return false;
         } catch(Exception e) {
             e.printStackTrace();
@@ -37,6 +37,7 @@ public class PersonDAOImpl implements PersonDAO {
         try {
             session = sessionFactory.openSession();
             Person person = (Person) session.load(Person.class, new Long(id));
+            Hibernate.initialize(person.getTodos());
             tx = session.getTransaction();
             session.beginTransaction();
             tx.commit();
@@ -68,20 +69,7 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public boolean updatePerson(long id) throws Exception {
-        try {
-            session = sessionFactory.openSession();
-            Object o = session.load(Person.class, id);
-            tx = session.getTransaction();
-            session.beginTransaction();
-            session.delete(o);
-            tx.commit();
-            return false;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            session.close();
-        }
+        return false;
     }
 
     @Override
