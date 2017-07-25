@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import org.quintor.crudbackend.model.Todo;
+import org.quintor.crudbackend.rest.dto.TodoDTO;
 import org.quintor.crudbackend.service.TodoService;
 
 @Controller
@@ -26,36 +26,37 @@ public class TodoController {
     static final Logger logger = Logger.getLogger(TodoController.class);
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity addTodo(@RequestBody Todo todo) {
+    public ResponseEntity addTodo(@RequestBody TodoDTO todo) {
         try {
             todoService.addTodo(todo);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(null, HttpStatus.NO_CONTENT);
+            return new ResponseEntity("No content found", HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(todo, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity getTodo(@PathVariable("id") long id) {
-        Todo todo = null;
+        TodoDTO todo = null;
         try {
             todo = todoService.getTodoById(id);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            logger.error("Error message for getTodoById", e);
+            return new ResponseEntity("No todo found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(todo, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public  ResponseEntity getTodo() {
-        List<Todo> todoList = null;
+        List<TodoDTO> todoList = null;
         try {
             todoList = todoService.getTodoList();
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No todo's found", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(todoList, HttpStatus.OK);
     }
@@ -64,10 +65,10 @@ public class TodoController {
     public ResponseEntity deleteTodo(@PathVariable("id") long id) {
         try {
             todoService.deleteTodo(id);
-            return new ResponseEntity(null, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity("No todo found", HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity("Todo succesfully deleted", HttpStatus.OK);
     }
 }

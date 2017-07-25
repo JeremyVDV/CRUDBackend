@@ -35,7 +35,7 @@ public class TodoDAOImpl implements TodoDAO {
     public Todo getTodoById(long id) throws Exception {
         try {
             session = sessionFactory.openSession();
-            Todo todo = (Todo) session.load(Todo.class, new Long(id));
+            Todo todo = (Todo) session.get(Todo.class, id);
             tx = session.getTransaction();
             session.beginTransaction();
             tx.commit();
@@ -74,7 +74,7 @@ public class TodoDAOImpl implements TodoDAO {
             session.beginTransaction();
             session.delete(o);
             tx.commit();
-            return false;
+            return true;
         } catch(Exception e) {
             e.printStackTrace();
             return false;

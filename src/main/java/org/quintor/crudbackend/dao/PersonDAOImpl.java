@@ -2,7 +2,6 @@ package org.quintor.crudbackend.dao;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -23,9 +22,10 @@ public class PersonDAOImpl implements PersonDAO {
             tx = session.beginTransaction();
             session.save(person);
             tx.commit();
-            return false;
+            return true;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return false;
         } finally {
             session.close();
@@ -36,14 +36,14 @@ public class PersonDAOImpl implements PersonDAO {
     public Person getPersonById(long id) throws Exception {
         try {
             session = sessionFactory.openSession();
-            Person person = (Person) session.load(Person.class, new Long(id));
-            Hibernate.initialize(person.getTodos());
+            Person person = (Person) session.get(Person.class, id);
             tx = session.getTransaction();
             session.beginTransaction();
             tx.commit();
             return person;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return null;
         } finally {
             session.close();
@@ -61,6 +61,7 @@ public class PersonDAOImpl implements PersonDAO {
             return personList;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return null;
         } finally {
             session.close();
@@ -68,8 +69,20 @@ public class PersonDAOImpl implements PersonDAO {
     }
 
     @Override
-    public boolean updatePerson(long id) throws Exception {
-        return false;
+    public boolean updatePerson(Person person) throws Exception {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            session.merge(person);
+            tx.commit();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+            return false;
+        } finally {
+            session.close();
+        }
     }
 
     @Override
@@ -81,13 +94,13 @@ public class PersonDAOImpl implements PersonDAO {
             session.beginTransaction();
             session.delete(o);
             tx.commit();
-            return false;
+            return true;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return false;
         } finally {
             session.close();
         }
     }
-
 }

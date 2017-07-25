@@ -1,10 +1,12 @@
 package org.quintor.crudbackend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.quintor.crudbackend.dao.PersonDAO;
+import org.quintor.crudbackend.rest.dto.PersonDTO;
 import org.quintor.crudbackend.model.Person;
 
 public class PersonServiceImpl implements PersonService {
@@ -13,18 +15,45 @@ public class PersonServiceImpl implements PersonService {
     PersonDAO personDao;
 
     @Override
-    public boolean addPerson(Person person) throws Exception {
+    public boolean addPerson(PersonDTO pdto) throws Exception {
+        Person person = new Person();
+        person.setId(pdto.getId());
+        person.setName(pdto.getName());
+        person.setTodos(pdto.getTodos());
         return personDao.addPerson(person);
     }
 
     @Override
-    public Person getPersonById(long id) throws Exception {
-        return personDao.getPersonById(id);
+    public List<PersonDTO> getPersonList() throws Exception {
+        List<Person> list = personDao.getPersonList();
+        List<PersonDTO> dtoList = new ArrayList<>();
+        for (Person person : list) {
+            PersonDTO pdto = new PersonDTO();
+            pdto.setId(person.getId());
+            pdto.setName(person.getName());
+            pdto.setTodos(person.getTodos());
+            dtoList.add(pdto);
+        }
+        return dtoList;
     }
 
     @Override
-    public List<Person> getPersonList() throws Exception {
-        return personDao.getPersonList();
+    public PersonDTO getPersonById(long id) throws Exception {
+        Person person = personDao.getPersonById(id);
+        PersonDTO pdto = new PersonDTO();
+        pdto.setId(person.getId());
+        pdto.setName(person.getName());
+        pdto.setTodos(person.getTodos());
+        return pdto;
+    }
+
+    @Override
+    public boolean updatePerson(PersonDTO pdto) throws Exception {
+        Person person = new Person();
+        person.setId(pdto.getId());
+        person.setName(pdto.getName());
+        person.setTodos(pdto.getTodos());
+        return personDao.updatePerson(person);
     }
 
     @Override
