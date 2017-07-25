@@ -1,10 +1,8 @@
 package org.quintor.crudbackend.model;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -43,10 +41,11 @@ public class Todo implements Serializable {
     public int getDone() { return done; }
     public void setDone(int done) { this.done = done; }
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "personid")
     @JsonBackReference
     private Person person;
 
     public Person getPerson() {return person;}
+    public void setPerson(Person person) { this.person = person; }
 }

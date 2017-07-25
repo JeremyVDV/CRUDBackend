@@ -40,11 +40,16 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PersonDTO getPersonById(long id) throws Exception {
         Person person = personDao.getPersonById(id);
-        PersonDTO pdto = new PersonDTO();
-        pdto.setId(person.getId());
-        pdto.setName(person.getName());
-        pdto.setTodos(person.getTodos());
-        return pdto;
+        if(person != null) {
+            PersonDTO pdto = new PersonDTO();
+            pdto.setId(person.getId());
+            pdto.setName(person.getName());
+            pdto.setTodos(person.getTodos());
+            return pdto;
+        } else {
+            System.out.println("test");
+            return null;
+        }
     }
 
     @Override

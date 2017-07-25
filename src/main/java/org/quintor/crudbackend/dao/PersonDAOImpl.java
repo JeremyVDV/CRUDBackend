@@ -73,7 +73,7 @@ public class PersonDAOImpl implements PersonDAO {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
-            session.merge(person);
+            session.update(person);
             tx.commit();
             return true;
         } catch(Exception e) {
