@@ -3,6 +3,7 @@ package org.quintor.crudbackend.rest.controller;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.quintor.crudbackend.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class PersonController {
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addPerson(@RequestBody PersonDTO person) throws Exception {
         personService.addPerson(person);
-        System.out.println("Id van: " + person.getId());
+        logger.info("Person created with name: " + person.getName());
         return new ResponseEntity(person, HttpStatus.CREATED);
     }
 
@@ -37,8 +38,9 @@ public class PersonController {
         PersonDTO person = personService.getPersonById(id);
         if(person == null) {
             logger.error("Person with id -" + id + "- not found");
-            return new ResponseEntity("Not able retrieve person. Person with the id of "+ id +" not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Not able retrieve person. Person with id "+ id +" not found", HttpStatus.NOT_FOUND);
         }
+        logger.info("Person with id -" + id + "- retrieved");
         return new ResponseEntity(person, HttpStatus.OK);
     }
 
@@ -48,13 +50,12 @@ public class PersonController {
         PersonDTO currentPerson = personService.getPersonById(id);
         if(currentPerson == null) {
             logger.error("Person with id -" + id + "- not found");
-            return new ResponseEntity("Not able retrieve person. Person with the id of "+ id +" not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Not able retrieve person. Person with id "+ id +" not found", HttpStatus.NOT_FOUND);
         }
-
         currentPerson.setName(person.getName());
         currentPerson.setTodos(person.getTodos());
-
         personService.updatePerson(currentPerson);
+        logger.info("Person with id -" + id + "- updated");
         return new ResponseEntity(currentPerson, HttpStatus.OK);
     }
 
@@ -63,9 +64,10 @@ public class PersonController {
     public ResponseEntity getPerson() throws Exception{
         List<PersonDTO> personList = personService.getPersonList();
         if(personList.isEmpty()) {
-            logger.error("No persons could be retrieved");
-            return new ResponseEntity("No persons could be retrieved", HttpStatus.NOT_FOUND);
+            logger.error("Person list could not be retrieved");
+            return new ResponseEntity("Person list could not be retrieved", HttpStatus.NOT_FOUND);
         }
+        logger.info("Person list has been retrieved");
         return new ResponseEntity(personList, HttpStatus.OK);
     }
 
@@ -75,9 +77,10 @@ public class PersonController {
         PersonDTO person = personService.getPersonById(id);
         if(person == null) {
             logger.error("Person with id -" + id + "- not found");
-            return new ResponseEntity("Not able to delete. Person with the id of "+ id +" not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Not able to delete. Person with id "+ id +" not found", HttpStatus.NOT_FOUND);
         }
         personService.deletePerson(id);
+        logger.info("Person with id -" + id + "- deleted");
         return new ResponseEntity(HttpStatus.OK);
     }
 }

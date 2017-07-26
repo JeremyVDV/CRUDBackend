@@ -10,11 +10,12 @@
   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
     <context:component-scan base-package="org.quintor.crudbackend.rest.controller" />
+
     <mvc:annotation-driven />
     <mvc:cors>
-        <mvc:mapping path="/person/**" allowed-origins="http://localhost:4200, http://localhost:8082"
-                     allowed-methods="GET, PUT, POST" allowed-headers="X-Requested-With,Content-Type,Accept,Origin"
-                     exposed-headers="" allow-credentials="false" max-age="3600" />
+        <mvc:mapping path="/person/**" allowed-origins="http://localhost:4200"
+        allowed-methods="GET, PUT, POST" allowed-headers="X-Requested-With,Content-Type,Accept,Origin"
+        exposed-headers="" allow-credentials="false" max-age="3600" />
 
         <mvc:mapping path="/todo/**" allowed-origins="http://localhost:4200" />
     </mvc:cors>
@@ -22,7 +23,7 @@
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/quintor" />
+        <property name="url" value="jdbc:mysql://localhost:3306/quintor2" />
         <property name="username" value="root" />
         <property name="password" value="Xa7c34pu2pi!" />
     </bean>

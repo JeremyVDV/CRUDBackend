@@ -19,8 +19,10 @@ public class PersonServiceImpl implements PersonService {
         Person person = new Person();
         person.setName(pdto.getName());
         person.setTodos(pdto.getTodos());
+
         Person p = personDao.addPerson(person);
         pdto.setId(p.getId());
+
         return pdto;
     }
 

@@ -1,7 +1,5 @@
 package org.quintor.crudbackend.model;
 
-
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.Proxy;
 
@@ -10,13 +8,12 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-@Proxy(lazy = false)
 @Entity
 @Table(name = "person")
 public class Person implements Serializable {
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "personid")
     private long id;
 
     public long getId() { return id; }
@@ -30,8 +27,11 @@ public class Person implements Serializable {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "person", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "person_has_todo", joinColumns = {
+            @JoinColumn(name = "personid", nullable = false, updatable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "todoid",
+                    nullable = false, updatable = false) })
     private Set<Todo> todos;
 
     public Set<Todo> getTodos() { return todos; }

@@ -3,6 +3,7 @@ package org.quintor.crudbackend.model;
 import org.codehaus.jackson.annotate.JsonBackReference;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
 public class Todo implements Serializable {
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "todoid")
     private long id;
 
     public long getId() { return id; }
@@ -40,12 +41,4 @@ public class Todo implements Serializable {
 
     public int getDone() { return done; }
     public void setDone(int done) { this.done = done; }
-
-    @ManyToOne()
-    @JoinColumn(name = "personid")
-    @JsonBackReference
-    private Person person;
-
-    public Person getPerson() {return person;}
-    public void setPerson(Person person) { this.person = person; }
 }
