@@ -15,12 +15,13 @@ public class PersonServiceImpl implements PersonService {
     PersonDAO personDao;
 
     @Override
-    public boolean addPerson(PersonDTO pdto) throws Exception {
+    public PersonDTO addPerson(PersonDTO pdto) throws Exception {
         Person person = new Person();
-        person.setId(pdto.getId());
         person.setName(pdto.getName());
         person.setTodos(pdto.getTodos());
-        return personDao.addPerson(person);
+        Person p = personDao.addPerson(person);
+        pdto.setId(p.getId());
+        return pdto;
     }
 
     @Override

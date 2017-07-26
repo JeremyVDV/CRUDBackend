@@ -16,17 +16,17 @@ public class PersonDAOImpl implements PersonDAO {
     Transaction tx = null;
 
     @Override
-    public boolean addPerson(Person person) throws Exception {
+    public Person addPerson(Person person) throws Exception {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.save(person);
             tx.commit();
-            return true;
+            return person;
         } catch(Exception e) {
             e.printStackTrace();
             tx.rollback();
-            return false;
+            return null;
         } finally {
             session.close();
         }

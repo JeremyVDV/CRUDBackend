@@ -6,7 +6,7 @@ import org.quintor.crudbackend.rest.dto.PersonDTO;
 
 public interface PersonService {
     //mist nog update
-    boolean addPerson(PersonDTO person) throws Exception;
+    PersonDTO addPerson(PersonDTO person) throws Exception;
     List<PersonDTO> getPersonList() throws Exception;
     PersonDTO getPersonById(long id) throws Exception;
     boolean updatePerson(PersonDTO person) throws Exception;

@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import org.quintor.crudbackend.rest.dto.PersonDTO;
 import org.quintor.crudbackend.service.PersonService;
@@ -29,7 +26,8 @@ public class PersonController {
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addPerson(@RequestBody PersonDTO person) throws Exception {
         personService.addPerson(person);
-        return new ResponseEntity("Person succesfully created", HttpStatus.CREATED);
+        System.out.println("Id van: " + person.getId());
+        return new ResponseEntity(person, HttpStatus.CREATED);
     }
 
 
