@@ -5,10 +5,10 @@ import java.util.List;
 import org.quintor.crudbackend.rest.dto.TodoDTO;
 
 public interface TodoService {
-    //mist nog update
-    public boolean addTodo(TodoDTO todo) throws Exception;
-    public List<TodoDTO> getTodoList() throws Exception;
-    public TodoDTO getTodoById(long id) throws Exception;
-    public boolean deleteTodo(long id) throws Exception;
+    TodoDTO addTodo(TodoDTO todo) throws Exception;
+    List<TodoDTO> getTodoList() throws Exception;
+    TodoDTO getTodoById(long id) throws Exception;
+    boolean updateTodo(TodoDTO todo) throws Exception;
+    boolean deleteTodo(long id) throws Exception;
 }
 

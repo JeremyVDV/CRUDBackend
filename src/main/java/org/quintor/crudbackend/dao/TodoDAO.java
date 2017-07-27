@@ -4,9 +4,9 @@ import java.util.List;
 import org.quintor.crudbackend.model.Todo;
 
 public interface TodoDAO {
-    //mist nog update
-    public boolean addTodo(Todo todo) throws Exception;
-    public List<Todo> getTodoList() throws Exception;
-    public Todo getTodoById(long id) throws Exception;
-    public boolean deleteTodo(long id) throws Exception;
+    Todo addTodo(Todo todo) throws Exception;
+    List<Todo> getTodoList() throws Exception;
+    Todo getTodoById(long id) throws Exception;
+    boolean updateTodo(Todo todo) throws Exception;
+    boolean deleteTodo(long id) throws Exception;
 }

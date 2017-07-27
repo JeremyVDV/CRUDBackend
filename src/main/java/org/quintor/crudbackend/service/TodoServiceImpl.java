@@ -15,42 +15,54 @@ public class TodoServiceImpl implements TodoService {
     TodoDAO todoDao;
 
     @Override
-    public boolean addTodo(TodoDTO pdto) throws Exception {
+    public TodoDTO addTodo(TodoDTO tdto) throws Exception {
         Todo todo = new Todo();
-        todo.setId(pdto.getId());
-        todo.setShortdesc(pdto.getShortdesc());
-        todo.setLongdesc(pdto.getLongdesc());
-        todo.setDate(pdto.getDate());
-        todo.setDone(pdto.getDone());
-        return todoDao.addTodo(todo);
-    }
-
-    @Override
-    public TodoDTO getTodoById(long id) throws Exception {
-        Todo todo = todoDao.getTodoById(id);
-        TodoDTO pdto = new TodoDTO();
-        pdto.setId(todo.getId());
-        pdto.setShortdesc(todo.getShortdesc());
-        pdto.setLongdesc(todo.getLongdesc());
-        pdto.setDate(todo.getDate());
-        pdto.setDone(todo.getDone());
-        return pdto;
+        todo.setShortdesc(tdto.getShortdesc());
+        todo.setLongdesc(tdto.getLongdesc());
+        todo.setDone(tdto.getDone());
+        Todo p = todoDao.addTodo(todo);
+        tdto.setId(p.getId());
+        return tdto;
     }
 
     @Override
     public List<TodoDTO> getTodoList() throws Exception {
         List<Todo> list = todoDao.getTodoList();
-        List<TodoDTO> dtoList  = new ArrayList<>();
-        for(Todo todo : list){
-            TodoDTO pdto = new TodoDTO();
-            pdto.setId(todo.getId());
-            pdto.setShortdesc(todo.getShortdesc());
-            pdto.setLongdesc(todo.getLongdesc());
-            pdto.setDate(todo.getDate());
-            pdto.setDone(todo.getDone());
-            dtoList.add(pdto);
+        List<TodoDTO> dtoList = new ArrayList<>();
+        for (Todo todo : list) {
+            TodoDTO tdto = new TodoDTO();
+            tdto.setId(todo.getId());
+            tdto.setShortdesc(todo.getShortdesc());
+            tdto.setLongdesc(todo.getLongdesc());
+            tdto.setDone(todo.getDone());
+            dtoList.add(tdto);
         }
         return dtoList;
+    }
+
+    @Override
+    public TodoDTO getTodoById(long id) throws Exception {
+        Todo todo = todoDao.getTodoById(id);
+        if(todo != null) {
+            TodoDTO tdto = new TodoDTO();
+            tdto.setId(todo.getId());
+            tdto.setShortdesc(todo.getShortdesc());
+            tdto.setLongdesc(todo.getLongdesc());
+            tdto.setDone(todo.getDone());
+            return tdto;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean updateTodo(TodoDTO tdto) throws Exception {
+        Todo todo = new Todo();
+        todo.setId(tdto.getId());
+        todo.setShortdesc(tdto.getShortdesc());
+        todo.setLongdesc(tdto.getLongdesc());
+        todo.setDone(tdto.getDone());
+        return todoDao.updateTodo(todo);
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class TodoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-
     private long id;
     private String shortdesc;
     private String longdesc;

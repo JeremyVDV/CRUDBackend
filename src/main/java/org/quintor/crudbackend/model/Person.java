@@ -1,8 +1,5 @@
 package org.quintor.crudbackend.model;
 
-import org.codehaus.jackson.annotate.JsonManagedReference;
-import org.hibernate.annotations.Proxy;
-
 import java.io.Serializable;
 import java.util.Set;
 

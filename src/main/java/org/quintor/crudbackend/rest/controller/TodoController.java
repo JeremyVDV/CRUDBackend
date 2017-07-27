@@ -22,50 +22,65 @@ public class TodoController {
 
     static final Logger logger = Logger.getLogger(TodoController.class);
 
+    /*--------------- CREATE TODO ------------------------------------------------------------------------*/
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity addTodo(@RequestBody TodoDTO todo) {
-        try {
-            todoService.addTodo(todo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity("No content found", HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity(todo, HttpStatus.OK);
+    public ResponseEntity addTodo(@RequestBody TodoDTO todo) throws Exception {
+        todoService.addTodo(todo);
+        logger.info("Todo created with short description: " + todo.getShortdesc());
+        return new ResponseEntity(todo, HttpStatus.CREATED);
     }
 
+
+    /*--------------- RETRIEVE SINGLE TODO BY ID ---------------------------------------------------------*/
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity getTodo(@PathVariable("id") long id) {
-        TodoDTO todo = null;
-        try {
-            todo = todoService.getTodoById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("Error message for getTodoById", e);
-            return new ResponseEntity("No todo found", HttpStatus.NOT_FOUND);
+    public ResponseEntity getTodo(@PathVariable("id") long id) throws Exception {
+        TodoDTO todo = todoService.getTodoById(id);
+        if(todo == null) {
+            logger.error("Todo with id -" + id + "- not found");
+            return new ResponseEntity("Not able retrieve todo. Todo with id "+ id +" not found", HttpStatus.NOT_FOUND);
         }
+        logger.info("Todo with id -" + id + "- retrieved");
         return new ResponseEntity(todo, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public  ResponseEntity getTodo() {
-        List<TodoDTO> todoList = null;
-        try {
-            todoList = todoService.getTodoList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity("No todo's found", HttpStatus.NOT_FOUND);
+    /*--------------- UPDATE TODO -------------------------------------------------------------------------*/
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
+    public ResponseEntity updateTodo(@PathVariable("id") long id, @RequestBody TodoDTO todo) throws Exception {
+        TodoDTO currentTodo = todoService.getTodoById(id);
+        if(currentTodo == null) {
+            logger.error("Todo with id -" + id + "- not found");
+            return new ResponseEntity("Not able retrieve todo. Todo with id "+ id +" not found", HttpStatus.NOT_FOUND);
         }
+        currentTodo.setShortdesc(todo.getShortdesc());
+        currentTodo.setLongdesc(todo.getLongdesc());
+        currentTodo.setDone(todo.getDone());
+        todoService.updateTodo(currentTodo);
+        logger.info("Todo with id -" + id + "- updated");
+        return new ResponseEntity(currentTodo, HttpStatus.OK);
+    }
+
+    /*--------------- RETRIEVE ALL TODOS ------------------------------------------------------------------*/
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ResponseEntity getTodo() throws Exception{
+        List<TodoDTO> todoList = todoService.getTodoList();
+        if(todoList.isEmpty()) {
+            logger.error("Todo list could not be retrieved");
+            return new ResponseEntity("Todo list could not be retrieved", HttpStatus.NOT_FOUND);
+        }
+        logger.info("Todo list has been retrieved");
         return new ResponseEntity(todoList, HttpStatus.OK);
     }
 
+    /*--------------- DELETE TODO ------------------------------------------------------------------------*/
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
-    public ResponseEntity deleteTodo(@PathVariable("id") long id) {
-        try {
-            todoService.deleteTodo(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity("No todo found", HttpStatus.NOT_FOUND);
+    public ResponseEntity deleteTodo(@PathVariable("id") long id) throws Exception{
+        TodoDTO todo = todoService.getTodoById(id);
+        if(todo == null) {
+            logger.error("Todo with id -" + id + "- not found");
+            return new ResponseEntity("Not able to delete. Todo with id "+ id +" not found", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity("Todo succesfully deleted", HttpStatus.OK);
+        todoService.deleteTodo(id);
+        logger.info("Todo with id -" + id + "- deleted");
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

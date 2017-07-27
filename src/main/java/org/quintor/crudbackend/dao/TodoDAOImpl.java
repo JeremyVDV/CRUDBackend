@@ -2,6 +2,7 @@ package org.quintor.crudbackend.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,16 +17,17 @@ public class TodoDAOImpl implements TodoDAO {
     Transaction tx = null;
 
     @Override
-    public boolean addTodo(Todo todo) throws Exception {
+    public Todo addTodo(Todo todo) throws Exception {
         try {
             session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.save(todo);
             tx.commit();
-            return false;
+            return todo;
         } catch(Exception e) {
             e.printStackTrace();
-            return false;
+            tx.rollback();
+            return null;
         } finally {
             session.close();
         }
@@ -42,6 +44,7 @@ public class TodoDAOImpl implements TodoDAO {
             return todo;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return null;
         } finally {
             session.close();
@@ -59,7 +62,25 @@ public class TodoDAOImpl implements TodoDAO {
             return todoList;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public boolean updateTodo(Todo todo) throws Exception {
+        try {
+            session = sessionFactory.openSession();
+            tx = session.beginTransaction();
+            session.update(todo);
+            tx.commit();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+            return false;
         } finally {
             session.close();
         }
@@ -77,6 +98,7 @@ public class TodoDAOImpl implements TodoDAO {
             return true;
         } catch(Exception e) {
             e.printStackTrace();
+            tx.rollback();
             return false;
         } finally {
             session.close();

@@ -2,7 +2,6 @@ package org.quintor.crudbackend.service;
 
 import java.util.List;
 
-import org.quintor.crudbackend.model.Person;
 import org.quintor.crudbackend.rest.dto.PersonDTO;
 
 public interface PersonService {

@@ -1,10 +1,6 @@
 package org.quintor.crudbackend.model;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-
 import java.io.Serializable;
-import java.util.Set;
-
 import javax.persistence.*;
 
 @Entity
@@ -29,12 +25,6 @@ public class Todo implements Serializable {
 
     public String getLongdesc() { return longdesc; }
     public void setLongdesc(String longdesc) { this.longdesc = longdesc; }
-
-    @Column(name = "date")
-    private String date;
-
-    public String getDate() { return date; }
-    public void setDate(String date) { this.date = date; }
 
     @Column(name = "done")
     private int done;
